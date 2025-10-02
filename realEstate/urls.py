@@ -5,5 +5,9 @@ from real_estate import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.main_page, name='main_page'),
+    path('', views.splash_page, name='splash_page'),
+    path('companies/',views.companies_page, name='companies_page'),
+    path('favorites/',views.favorites_page,name='favorites_page'),
+    path('main/',views.main_page,name='main_page'),
+    path('settings/',views.settings_page,name='settings_page')
 ]

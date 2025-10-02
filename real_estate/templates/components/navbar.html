@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+
+    <link rel="stylesheet" href="{% static 'real_estate/styles.css' %}">
+</head>
+<body>
+
+    <div class="ui large menu">
+        <div class="header item logo">Real Estate</div>
+        <a class="item">Favorites</a>
+        <a class="item">Companies</a>
+        <a class="item">Settings</a>
+
+        <div class="right menu">
+            <div class="item">
+                <div class="ui action input">
+                    <input type="text" placeholder="Search">
+                    <button class="ui blue button">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+</body>
+</html>
