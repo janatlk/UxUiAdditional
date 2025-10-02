@@ -1,0 +1,28 @@
+{% extends 'components/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/property_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="ui container">
+        <div class="ui card">
+            <div class="image">
+                <img src="{{ property.image.url }}" alt="{{ property.title }}">
+            </div>
+            <div class="content">
+                <div class="header">{{ property.title }}</div>
+                <div class="meta">
+                    <span class="date">${{ property.price }}</span>
+                </div>
+                <div class="description">
+                    {{ property.description }}
+                </div>
+            </div>
+            <div class="extra content">
+                <button class="ui primary button" onclick="window.history.back();">Back</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

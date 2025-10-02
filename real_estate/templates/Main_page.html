@@ -1,5 +1,26 @@
 {% extends 'components/navbar.html' %}
-
+{% load static %}
+{% block head %}<link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}"> {% endblock %}
 {% block content %}
-    
+<div class="ui three stackable cards">
+    {% for property in properties %}
+    <div class="card">
+        <div class="image">
+            <img src="{{ property.image.url }}" alt="{{ property.title }}">
+        </div>
+        <div class="content">
+            <div class="header">{{ property.title }}</div>
+            <div class="meta">
+                <span class="date">${{ property.price }}</span>
+            </div>
+            <div class="description">
+                {{ property.description|truncatewords:20 }}
+            </div>
+        </div>
+        <div class="dop content">
+            <a href="/property/{{ property.id }}"><button class="ui primary button">View Details</button></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
