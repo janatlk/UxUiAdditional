@@ -10,5 +10,6 @@ urlpatterns = [
     path('favorites/',views.favorites_page,name='favorites_page'),
     path('main/',views.main_page,name='main_page'),
     path('settings/',views.settings_page,name='settings_page'),
-    path('property/<int:property_id>/', views.render_each_one, name='one_property')
+    path('property/<int:property_id>/', views.render_each_one, name='one_property'),
+    path('search/', views.search_view, name='search_page'), 
 ]

@@ -20,10 +20,10 @@
 
         <div class="right menu">
             <div class="item">
-                <div class="ui action input">
-                    <input type="text" id="search-input" placeholder="Search" autocomplete="off">
-                    <button class="ui blue button" id="search-button">Search</button>
-                </div>
+                <form class="ui action input" method="get" action="{% url 'search_page' %}">
+                    <input type="text" name="q" placeholder="Search" value="{{ request.GET.q|default_if_none:'' }}">
+                    <button class="ui blue button" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>
