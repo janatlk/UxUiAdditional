@@ -5,8 +5,37 @@ from django.db.models import Q
 def splash_page(request):
     return render(request, 'SplashScreen.html')
 def main_page(request):
+    #фильттр
+    query = request.GET.get('q', '')
+    location = request.GET.get('location', '')
+    min_price = request.GET.get('min_price', '')
+    max_price = request.GET.get('max_price', '')
     properties = Property.objects.all()
-    return render(request, 'Main_page.html', {'properties': properties})
+    if query:
+        properties = properties.filter(title__icontains=query)
+    if location:
+        properties = properties.filter(location__icontains=location)
+    if min_price:
+        properties = properties.filter(price__gte=min_price)
+    if max_price:
+        properties = properties.filter(price__lte=max_price)
+
+    context = { 
+        'properties': properties,
+        'filters': {
+            'q': query,
+            'location': location,
+            'min_price': min_price,
+            'max_price': max_price,
+        }
+    }
+    
+    return render(request, 'Main_page.html', context)
+
+
+
+
+
 def settings_page(request):
     return render(request, 'Settings.html')
 def companies_page(request):
