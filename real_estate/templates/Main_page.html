@@ -45,11 +45,15 @@
             <div class="header">{{ property.title }}</div>
             <div class="meta">
                 <span class="date">${{ property.price }}</span>
+                <div class="location">
+                    <span class="loc"><i>{{ property.location }}</i></span>
+                </div><br>
             </div>
             <div class="description">
                 <p>
                 {{ property.description }}</p>
             </div>
+
         </div>
         <div class="dop content">
             <a href="/property/{{ property.id }}"><button class="ui primary button">View Details</button></a>

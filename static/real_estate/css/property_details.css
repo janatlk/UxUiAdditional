@@ -1,0 +1,14 @@
+.container {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+.card {
+    width: 65rem !important;
+    
+}
+.description p{
+    width: 100% ;
+    position: relative;
+    word-wrap: break-word;
+}

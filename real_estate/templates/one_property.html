@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'real_estate/css/property_detail.css' %}">
+<link rel="stylesheet" href="{% static 'real_estate/css/property_details.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,16 +13,63 @@
             </div>
             <div class="content">
                 <div class="header">{{ property.title }}</div>
-                <div class="meta">
+                <div class="meta"><br>
                     <span class="date">${{ property.price }}</span>
-                </div>
+                </div><br>
+                <div class="location">
+                    <span class="loc"><i>{{ property.location }}</i></span>
+                </div><br>
                 <div class="description">
-                    {{ property.description }}
+                    <p>{{ property.description }}</p>
                 </div>
             </div>
             <div class="extra content">
                 <button class="ui primary button" onclick="window.history.back();">Back</button>
+                <button class="ui button" id="favorite-btn" onclick="toggleFavorite(
+                    '{{ property.id }}',
+                    '{{ property.title }}',
+                    '{{ property.price }}',
+                    '{{ property.description }}',
+                    '{{ property.image.url }}'
+                )">
+                    Add to Favorites
+                </button>
             </div>
         </div>
     </div>
+
+    <script>
+        window.onload = function() {
+            const favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
+            const propertyId = '{{ property.id }}';
+            const favoriteBtn = document.getElemntById('favorite-btn');
+
+            if (favorites.some(property => property.id === propertyId)) {
+                favoriteBtn.textContent = 'Remove from Favorites';
+            }
+        };
+
+        function toggleFavorite(propertyId, title, price, description, image) {
+            let favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
+            const propertyData = {
+                id: propertyId,
+                title: title,
+                price: price,
+                description: description,
+                image: image
+            };
+
+            if (favorites.some(property => property.id === propertyId)) {
+                favorites = favorites.filter(property => property.id !== propertyId);
+                sessionStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('Property removed from favorites!');
+                document.getElementById('favorite-btn').textContent = 'Add to Favorites';
+            } else {
+                favorites.push(propertyData);
+                sessionStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('Property added to favorites!');
+                document.getElementById('favorite-btn').textContent = 'Remove from Favorites';
+            }
+        }
+    </script>
 {% endblock %}

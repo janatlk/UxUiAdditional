@@ -1,4 +1,58 @@
 {% extends 'components/navbar.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}">
+{% endblock %}
 {% block content %}
-    <h1>Not Found</h1>
+    <div class="ui container">
+        <h2>Your Favorite Properties</h2>
+
+        <div class="ui cards" id="favorites-list">
+
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
+            const favoritesList = document.getElementById('favorites-list');
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p>You have no favorite properties yet.</p>';
+                return;
+            }
+
+            favorites.forEach(property => {
+                const card = document.createElement('div');
+                card.classList.add('ui', 'card');
+                card.innerHTML = `
+                    <div class="image">
+                        <img src="${property.image}" alt="${property.title}">
+                    </div>
+                    <div class="content">
+                        <div class="header">${property.title}</div>
+                        <div class="meta">$${property.price}</div>
+                        <div class="description">${property.description}</div>
+                    </div>
+                    <div class="extra content">
+                        <button class="ui button" onclick="window.location.href='/property/${property.id}/'">View Details</button>
+                        <button class="ui red button" onclick="removeFromFavorites(${property.id})">Remove from Favorites</button>
+                    </div>
+                `;
+                favoritesList.appendChild(card);
+            });
+        };
+
+        function removeFromFavorites(propertyId) {
+            let favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
+
+            propertyId = parseInt(propertyId);
+
+            favorites = favorites.filter(property => parseInt(property.id) !== propertyId);
+
+            sessionStorage.setItem('favorites', JSON.stringify(favorites));
+
+            location.reload();
+        }
+    </script>
 {% endblock %}

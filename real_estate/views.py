@@ -41,7 +41,12 @@ def settings_page(request):
 def companies_page(request):
     return render(request,'Companies.html')
 def favorites_page(request):
-    return render(request,'Favorites.html')
+    favorites_ids = request.session.get('favorites', [])
+    
+    properties = Property.objects.filter(id__in=favorites_ids)
+
+    return render(request, 'Favorites.html', {'properties': properties})
+
 def render_each_one(request, property_id):
     property = get_object_or_404(Property, id=property_id)
     return render(request,'one_property.html', {'property':property})
