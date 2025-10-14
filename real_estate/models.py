@@ -1,5 +1,11 @@
 from django.db import models
 
+class Companies(models.Model):
+    title = models.CharField(max_length=67)
+    logo = models.ImageField(
+        upload_to='logos'
+    )
+    description = models.TextField()
 
 class Property(models.Model):
     title = models.CharField(max_length=255)
@@ -12,3 +18,4 @@ class Property(models.Model):
         )
     def __str__(self):
         return self.title
+    
