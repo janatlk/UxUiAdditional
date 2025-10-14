@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Property
+from .models import Property, Companies
 from django.db.models import Q
 
 def splash_page(request):
@@ -39,7 +39,12 @@ def main_page(request):
 def settings_page(request):
     return render(request, 'Settings.html')
 def companies_page(request):
-    return render(request,'Companies.html')
+    query = request.GET.get('q', '')
+    companies = Companies.objects.all()
+    context = {
+        'companies': companies
+    }
+    return render(request,'Companies.html',context)
 def favorites_page(request):
     favorites_ids = request.session.get('favorites', [])
     
