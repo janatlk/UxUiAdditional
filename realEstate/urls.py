@@ -4,9 +4,10 @@ from django.urls import path
 from real_estate import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', views.splash_page, name='splash_page'),
     path('companies/',views.companies_page, name='companies_page'),
+    path('companies/<int:company_id>',views.render_each_one_company, name='companies_page_one'),
     path('favorites/',views.favorites_page,name='favorites_page'),
     path('main/',views.main_page,name='main_page'),
     path('settings/',views.settings_page,name='settings_page'),

@@ -2,63 +2,69 @@
 {% load static %}
 {% block head %}<link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}"> {% endblock %}
 {% block content %}
-<form method="get" class="ui form form1">
-    <div class="fields">
+<div class="center"> 
 
-        <div class="four wide field field1">
-            <label>Search</label>
-            <input type="text" name="q" placeholder="Search..." value="{{ filters.q }}">
-        </div>
-
-        <div class="four wide field field2">
-            <label>Location</label>
-            <input type="text" name="location" placeholder="Location" value="{{ filters.location }}">
-        </div>
-
-        <div class="three wide field field3">
-            <label>Min</label>
-            <input type="number" name="min_price" step="0.01" placeholder="Min" value="{{ filters.min_price }}">
-        </div>
-
-        <div class="three wide field field4">
-            <label>Max</label>
-            <input type="number" name="max_price" step="0.01" placeholder="Max" value="{{ filters.max_price }}">
-        </div>
-
-        <div class="two wide field field5 btn-wrap">
-            <button class="ui primary button btn1" type="submit">Filter</button>
-        </div>
-
-        <div class="two wide field field6 btn-wrap">
+    <form method="get" class="ui form form1">
+        <div class="fields">
+            
+            <div class="four wide field field1">
+                <label>Search</label>
+                <input type="text" name="q" placeholder="Search..." value="{{ filters.q }}">
+            </div>
+            
+            <div class="four wide field field2">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="Location" value="{{ filters.location }}">
+            </div>
+            
+            <div class="three wide field field3">
+                <label>Min</label>
+                <input type="number" name="min_price" step="0.01" placeholder="Min" value="{{ filters.min_price }}">
+            </div>
+            
+            <div class="three wide field field4">
+                <label>Max</label>
+                <input type="number" name="max_price" step="0.01" placeholder="Max" value="{{ filters.max_price }}">
+            </div>
+            
+            <div class="two wide field field5 btn-wrap">
+                <button class="ui primary button btn1" type="submit">Filter</button>
+            </div>
+            
+            <div class="two wide field field6 btn-wrap">
             <a href="{% url 'main_page' %}" class="ui button btn2">Reset</a>
         </div>
-
+        
     </div>
-</form>
-<div class="ui three stackable cards">
-    {% for property in properties %}
-    <div class="card">
-        <div class="image">
-            <img src="{{ property.image.url }}" alt="{{ property.title }}">
-        </div>
-        <div class="content">
-            <div class="header">{{ property.title }}</div>
-            <div class="meta">
-                <span class="date">${{ property.price }}</span>
-                <div class="location">
-                    <span class="loc"><i>{{ property.location }}</i></span>
-                </div><br>
-            </div>
-            <div class="description">
-                <p>
-                {{ property.description }}</p>
-            </div>
-
-        </div>
-        <div class="dop content">
-            <a href="/property/{{ property.id }}"><button class="ui primary button">View Details</button></a>
-        </div>
-    </div>
-    {% endfor %}
 </div>
+</form>
+<div class="center">
+    
+    <div class="ui three stackable cards">
+        {% for property in properties %}
+        <div class="card">
+            <div class="image">
+                <img src="{{ property.image.url }}" alt="{{ property.title }}">
+            </div>
+            <div class="content">
+                <div class="header">{{ property.title }}</div>
+                <div class="meta">
+                    <span class="date">${{ property.price }}</span>
+                    <div class="location">
+                        <span class="loc"><i>{{ property.location }}</i></span>
+                    </div>
+                </div>
+                <div class="description">
+                    <p>{{ property.description }}</p>
+                </div>
+            </div>
+            <div class="dop content">
+                <a href="/property/{{ property.id }}">
+                    <button class="ui primary button">View Details</button>
+                </a>
+            </div>
+        </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

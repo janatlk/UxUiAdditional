@@ -16,7 +16,6 @@
         <a href="/main/"><div class="header item logo"><image src="{% static 'real_estate/svg/logo.svg' %}"></image></div></a>
         <a class="item" href="{% url 'favorites_page' %}">Favorites</a>
         <a class="item" href="{% url 'companies_page' %}">Companies</a>
-        <a class="item" href="{% url 'settings_page' %}">Settings</a>
 
         <div class="right menu">
             <div class="item">
@@ -24,6 +23,7 @@
                     <input type="text" name="q" placeholder="Search" value="{{ request.GET.q|default_if_none:'' }}">
                     <button class="ui blue button" type="submit">Search</button>
                 </form>
+                <a href="/admin/"><button class="ui blue button">AdminPanel</button></a>
             </div>
         </div>
     </div>

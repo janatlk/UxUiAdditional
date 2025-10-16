@@ -55,6 +55,11 @@ def favorites_page(request):
 def render_each_one(request, property_id):
     property = get_object_or_404(Property, id=property_id)
     return render(request,'one_property.html', {'property':property})
+
+def render_each_one_company(request, company_id):
+    companies = get_object_or_404(Companies, id=company_id)
+    return render(request,'one_company.html', {'companies':companies})
+
 def search_view(request):
     query = request.GET.get('q','') 
     results = []
