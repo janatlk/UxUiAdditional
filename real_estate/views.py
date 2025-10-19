@@ -4,32 +4,43 @@ from django.db.models import Q
 
 def splash_page(request):
     return render(request, 'SplashScreen.html')
+from django.shortcuts import render
+from .models import Property, Companies
+
 def main_page(request):
-    #фильттр
-    query = request.GET.get('q', '')
+    # Получаем фильтры из GET-запроса
+    company_id = request.GET.get('company', '')
     location = request.GET.get('location', '')
     min_price = request.GET.get('min_price', '')
     max_price = request.GET.get('max_price', '')
+
     properties = Property.objects.all()
-    if query:
-        properties = properties.filter(title__icontains=query)
+
+    if company_id:
+        properties = properties.filter(company_linked_id=company_id)
     if location:
-        properties = properties.filter(location__icontains=location)
+        properties = properties.filter(location=location)
     if min_price:
         properties = properties.filter(price__gte=min_price)
     if max_price:
         properties = properties.filter(price__lte=max_price)
 
-    context = { 
+    # Получаем все компании и уникальные локации для выпадающих списков
+    companies = Companies.objects.all()
+    locations = Property.objects.values_list('location', flat=True).distinct()
+
+    context = {
         'properties': properties,
+        'companies': companies,
+        'locations': locations,
         'filters': {
-            'q': query,
+            'company': company_id,
             'location': location,
             'min_price': min_price,
             'max_price': max_price,
         }
     }
-    
+
     return render(request, 'Main_page.html', context)
 
 

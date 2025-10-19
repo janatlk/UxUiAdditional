@@ -1,58 +1,61 @@
 {% extends 'components/navbar.html' %}
 {% load static %}
+
 {% block head %}
-    <link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}">
+<link rel="stylesheet" href="{% static 'real_estate/css/fav.css' %}">
 {% endblock %}
+
 {% block content %}
-    <div class="ui container">
-        <h2>Your Favorite Properties</h2>
+<div class="ui container">
+    <h2>Your Favorite Properties</h2>
 
-        <div class="ui cards" id="favorites-list">
+    <div class="ui cards" id="favorites-list"></div>
+</div>
 
-        </div>
-    </div>
+<script>
+    function loadFavorites() {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const favoritesList = document.getElementById('favorites-list');
 
-    <script>
-        window.onload = function() {
-            const favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
-            const favoritesList = document.getElementById('favorites-list');
-            
-            if (favorites.length === 0) {
-                favoritesList.innerHTML = '<p>You have no favorite properties yet.</p>';
-                return;
-            }
+    favoritesList.innerHTML = '';
 
-            favorites.forEach(property => {
-                const card = document.createElement('div');
-                card.classList.add('ui', 'card');
-                card.innerHTML = `
-                    <div class="image">
-                        <img src="${property.image}" alt="${property.title}">
-                    </div>
-                    <div class="content">
-                        <div class="header">${property.title}</div>
-                        <div class="meta">$${property.price}</div>
-                        <div class="description">${property.description}</div>
-                    </div>
-                    <div class="extra content">
-                        <button class="ui button" onclick="window.location.href='/property/${property.id}/'">View Details</button>
-                        <button class="ui red button" onclick="removeFromFavorites(${property.id})">Remove from Favorites</button>
-                    </div>
-                `;
-                favoritesList.appendChild(card);
-            });
-        };
+    if (favorites.length === 0) {
+        favoritesList.innerHTML = '<p>You have no favorite properties yet.</p>';
+        return;
+    }
 
-        function removeFromFavorites(propertyId) {
-            let favorites = JSON.parse(sessionStorage.getItem('favorites')) || [];
+    favorites.forEach(property => {
+        const card = document.createElement('div');
+        card.classList.add('ui', 'card');
 
-            propertyId = parseInt(propertyId);
+        const imageUrl = property.image || '/static/no_image.jpg';
 
-            favorites = favorites.filter(property => parseInt(property.id) !== propertyId);
+        card.innerHTML = `
+            <div class="image">
+                <img src="${imageUrl}" alt="${property.title}" width="250">
+            </div>
+            <div class="content">
+                <div class="header">${property.title}</div>
+                <div class="meta">$${property.price}</div>
+                <div class="description">${property.description}</div>
+            </div>
+            <div class="extra content">
+                <button class="ui button" onclick="window.location.href='/property/${property.id}/'">View Details</button>
+                <button class="ui red button" onclick="removeFromFavorites('${property.id}')">Remove from Favorites</button>
+            </div>
+        `;
 
-            sessionStorage.setItem('favorites', JSON.stringify(favorites));
+        favoritesList.appendChild(card);
+    });
+}
 
-            location.reload();
-        }
-    </script>
+function removeFromFavorites(propertyId) {
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    favorites = favorites.filter(p => p.id != propertyId);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    loadFavorites();
+}
+
+window.onload = loadFavorites;
+</script>
 {% endblock %}

@@ -1,55 +1,77 @@
 {% extends 'components/navbar.html' %}
 {% load static %}
-{% block head %}<link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}"> {% endblock %}
-{% block content %}
-<div class="center"> 
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/main_page.css' %}">
+{% endblock %}
 
-    <form method="get" class="ui form form1">
-        <div class="fields">
-            
-            <div class="four wide field field1">
-                <label>Search</label>
-                <input type="text" name="q" placeholder="Search..." value="{{ filters.q }}">
-            </div>
-            
-            <div class="four wide field field2">
-                <label>Location</label>
-                <input type="text" name="location" placeholder="Location" value="{{ filters.location }}">
-            </div>
-            
-            <div class="three wide field field3">
-                <label>Min</label>
-                <input type="number" name="min_price" step="0.01" placeholder="Min" value="{{ filters.min_price }}">
-            </div>
-            
-            <div class="three wide field field4">
-                <label>Max</label>
-                <input type="number" name="max_price" step="0.01" placeholder="Max" value="{{ filters.max_price }}">
-            </div>
-            
-            <div class="two wide field field5 btn-wrap">
-                <button class="ui primary button btn1" type="submit">Filter</button>
-            </div>
-            
-            <div class="two wide field field6 btn-wrap">
-            <a href="{% url 'main_page' %}" class="ui button btn2">Reset</a>
-        </div>
-        
+{% block content %}
+<div class="ui container" style="display: flex; gap: 30px; margin-top: 20px;">
+
+
+    <form method="get" action="{% url 'main_page' %}" class="ui vertical form" style="width: 300px;">
+    <h3 class="ui header">Filters</h3>
+
+    <!-- Компания -->
+    <div class="field">
+        <label>Company</label>
+        <select name="company" class="ui dropdown">
+            <option value="">All Companies</option>
+            {% for company in companies %}
+                <option value="{{ company.id }}" {% if filters.company == company.id|stringformat:"s" %}selected{% endif %}>
+                    {{ company.title }}
+                </option>
+            {% endfor %}
+        </select>
     </div>
-</div>
+
+    <!-- Местоположение -->
+    <div class="field">
+        <label>Location</label>
+        <select name="location" class="ui dropdown">
+            <option value="">All Locations</option>
+            {% for loc in locations %}
+                <option value="{{ loc }}" {% if filters.location == loc %}selected{% endif %}>{{ loc }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Цена -->
+    <div class="two fields">
+        <div class="field">
+            <label>Min Price</label>
+            <input type="number" name="min_price" step="1000" placeholder="Min" value="{{ filters.min_price }}">
+        </div>
+        <div class="field">
+            <label>Max Price</label>
+            <input type="number" name="max_price" step="1000" placeholder="Max" value="{{ filters.max_price }}">
+        </div>
+    </div>
+
+    <button class="ui primary button" type="submit">Apply Filters</button>
+    <a href="{% url 'main_page' %}" class="ui button" style="margin-top: 10px;">Reset</a>
 </form>
-<div class="center">
-    
-    <div class="ui three stackable cards">
+
+
+
+
+    <div class="ui three stackable cards" style="flex-grow: 1;">
         {% for property in properties %}
         <div class="card">
             <div class="image">
-                <img src="{{ property.image.url }}" alt="{{ property.title }}">
+                {% with first_image=property.images.first %}
+                  {% if first_image %}
+                    <img src="{{ first_image.image.url }}" alt="Фото">
+                  {% else %}
+                    <img src="/static/no_image.jpg" alt="Нет фото">
+                  {% endif %}
+                {% endwith %}
             </div>
             <div class="content">
                 <div class="header">{{ property.title }}</div>
                 <div class="meta">
                     <span class="date">${{ property.price }}</span>
+                    <br>
+                    <span class="loc2">{{ property.company_linked.title }}</span>
                     <div class="location">
                         <span class="loc"><i>{{ property.location }}</i></span>
                     </div>
@@ -64,7 +86,12 @@
                 </a>
             </div>
         </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
+
+</div>
+
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
 {% endblock %}
