@@ -10,23 +10,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
     <link rel="stylesheet" href="{% static 'real_estate/css/styles.css' %}">
 
-    <style>
-        .language-selector {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .language-selector img {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-        }
-        .language-selector img:hover {
-            border-color: #666;
-        }
-    </style>
 </head>
 <body>
 
@@ -34,13 +17,13 @@
         <a href="/main/"><div class="header center item logo">
                 <img src="{% static 'real_estate/svg/logo.svg' %}" alt="Logo">
         </div></a>
-        <a class="item" href="{% url 'favorites_page' %}">Favorites</a>
-        <a class="item" href="{% url 'companies_page' %}">Companies</a>
-        <a class="item" href="{% url 'settings_page' %}">Settings</a>
+        <a class="item" href="{% url 'favorites_page' %}">Избранные</a>
+        <a class="item" href="{% url 'companies_page' %}">Компании</a>
+        <a class="item" href="{% url 'settings_page' %}">Настройки</a>
 
         <div class="right menu">
             <div class="item">
-                <a href="/admin/"><button class="ui blue button">AdminPanel</button></a>
+                <a href="/admin/"><button class="ui blue button">Админ-Панель</button></a>
             </div>
         </div>
     </div>

@@ -1,21 +1,23 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Property, Companies
 from django.db.models import Q
 
+# --- Вспомогательная функция ---
+def get_template_for_lang(request, template_name):
+    lang = request.session.get('lang', 'en')
+    return f"{lang}/{template_name}"  # например "en/Main_page.html"
+
+# --- Страницы ---
 def splash_page(request):
-    return render(request, 'SplashScreen.html')
-from django.shortcuts import render
-from .models import Property, Companies
+    return render(request, get_template_for_lang(request, 'SplashScreen.html'))
 
 def main_page(request):
-    # Получаем фильтры из GET-запроса
     company_id = request.GET.get('company', '')
     location = request.GET.get('location', '')
     min_price = request.GET.get('min_price', '')
     max_price = request.GET.get('max_price', '')
 
     properties = Property.objects.all()
-
     if company_id:
         properties = properties.filter(company_linked_id=company_id)
     if location:
@@ -25,7 +27,6 @@ def main_page(request):
     if max_price:
         properties = properties.filter(price__lte=max_price)
 
-    # Получаем все компании и уникальные локации для выпадающих списков
     companies = Companies.objects.all()
     locations = Property.objects.values_list('location', flat=True).distinct()
 
@@ -40,45 +41,41 @@ def main_page(request):
             'max_price': max_price,
         }
     }
-
-    return render(request, 'Main_page.html', context)
-
-
-
-
+    return render(request, get_template_for_lang(request, 'Main_page.html'), context)
 
 def settings_page(request):
-    return render(request, 'Settings.html')
+    return render(request, get_template_for_lang(request, 'Settings.html'))
+
 def companies_page(request):
-    query = request.GET.get('q', '')
     companies = Companies.objects.all()
-    context = {
-        'companies': companies
-    }
-    return render(request,'Companies.html',context)
+    context = {'companies': companies}
+    return render(request, get_template_for_lang(request, 'Companies.html'), context)
+
 def favorites_page(request):
     favorites_ids = request.session.get('favorites', [])
-    
     properties = Property.objects.filter(id__in=favorites_ids)
-
-    return render(request, 'Favorites.html', {'properties': properties})
+    return render(request, get_template_for_lang(request, 'Favorites.html'), {'properties': properties})
 
 def render_each_one(request, property_id):
     property = get_object_or_404(Property, id=property_id)
-    return render(request,'one_property.html', {'property':property})
+    return render(request, get_template_for_lang(request, 'one_property.html'), {'property': property})
 
 def render_each_one_company(request, company_id):
-    companies = get_object_or_404(Companies, id=company_id)
-    return render(request,'one_company.html', {'companies':companies})
+    company = get_object_or_404(Companies, id=company_id)
+    properties = Property.objects.filter(company_linked=company)
+    context = {'company': company, 'properties': properties}
+    return render(request, get_template_for_lang(request, 'one_company.html'), context)
 
 def search_view(request):
-    query = request.GET.get('q','') 
+    query = request.GET.get('q','')
     results = []
     if query:
         results = Property.objects.filter(Q(title__icontains=query))
-        
-    context = {
-        'query':query,
-        'results':results
-    }
-    return render(request,'search_results.html',context)
+    context = {'query': query, 'results': results}
+    return render(request, get_template_for_lang(request, 'search_results.html'), context)
+
+# --- Смена языка ---
+def set_language(request, lang):
+    if lang in ['en', 'ru', 'ky']:
+        request.session['lang'] = lang
+    return redirect(request.META.get('HTTP_REFERER', '/'))

@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'real_estate/css/Splash.css' %}">
+</head>
+<body>
+
+    <div class="splash-screen">
+        <div class="logo">
+            <img src="{% static 'real_estate/svg/logo.svg' %}" alt="Logo">
+        </div>
+
+        <div class="text">
+            <h1>Добро пожаловать в Real Estate</h1>
+        </div>
+
+        <div class="continue-button">
+            <button onclick="startApp()">Продолжить</button>
+        </div>
+    </div>
+
+    <script>
+        function startApp() {
+    document.querySelector('.splash-screen').classList.add('fade-out');
+    
+    setTimeout(function() {
+        document.querySelector('.splash-screen').style.display = 'none';
+        
+        window.location.href = "/main/"; // тут РЕДИРЕКТ
+    }, 1000);
+}
+    </script>
+</body>
+</html>

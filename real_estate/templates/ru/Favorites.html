@@ -1,0 +1,61 @@
+{% extends 'ru/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/fav.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ui container">
+    <h2>Ваши избранные объекты</h2>
+
+    <div class="ui cards" id="favorites-list"></div>
+</div>
+
+<script>
+    function loadFavorites() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const favoritesList = document.getElementById('favorites-list');
+
+        favoritesList.innerHTML = '';
+
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = '<p>У вас пока нет избранных объектов.</p>';
+            return;
+        }
+
+        favorites.forEach(property => {
+            const card = document.createElement('div');
+            card.classList.add('ui', 'card');
+
+            const imageUrl = property.image || '/static/no_image.jpg';
+
+            card.innerHTML = `
+                <div class="image">
+                    <img src="${imageUrl}" alt="${property.title}" width="250">
+                </div>
+                <div class="content">
+                    <div class="header">${property.title}</div>
+                    <div class="meta">$${property.price}</div>
+                    <div class="description">${property.description}</div>
+                </div>
+                <div class="extra content">
+                    <button class="ui button" onclick="window.location.href='/property/${property.id}/'">Посмотреть детали</button>
+                    <button class="ui red button" onclick="removeFromFavorites('${property.id}')">Удалить из избранного</button>
+                </div>
+            `;
+
+            favoritesList.appendChild(card);
+        });
+    }
+
+    function removeFromFavorites(propertyId) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favorites = favorites.filter(p => p.id != propertyId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        loadFavorites();
+    }
+
+    window.onload = loadFavorites;
+</script>
+{% endblock %}

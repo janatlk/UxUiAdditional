@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'realEstate.urls'
@@ -103,13 +104,26 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# Поддерживаемые языки
+LANGUAGES = [
+    ('en', 'English'),
+    ('ru', 'Русский'),
+]
 
-TIME_ZONE = 'UTC'
+# Язык по умолчанию
+LANGUAGE_CODE = 'en'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
+
+# Путь для файлов перевода
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+TIME_ZONE = 'UTC'
+
+
 
 
 # Static files (CSS, JavaScript, Images)

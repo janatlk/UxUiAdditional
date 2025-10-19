@@ -1,0 +1,21 @@
+{% extends 'en/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ui container" style="margin-top: 30px; text-align: center;">
+    <h2>Language Settings</h2>
+
+    <div class="ui buttons" style="margin-top: 20px;">
+        <a href="{% url 'set_language' 'en' %}" class="ui button">
+            <img src="{% static 'real_estate/svg/flags/us.svg' %}" alt="English" style="width:24px; margin-right:5px;"> English
+        </a>
+        <a href="{% url 'set_language' 'ru' %}" class="ui button">
+            <img src="{% static 'real_estate/svg/flags/ru.svg' %}" alt="Русский" style="width:24px; margin-right:5px;"> Русский
+        </a>
+    </div>
+</div>
+{% endblock %}

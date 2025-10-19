@@ -1,0 +1,35 @@
+{% extends 'ru/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/companies.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="companies-container">
+    <h1 class="page-title">Наши компании</h1>
+
+    {% if companies %}
+    <div class="cards-grid">
+        {% for company in companies %}
+        <div class="company-card">
+            <div class="company-logo">
+                <img src="{{ company.logo.url }}" alt="{{ company.title }}">
+            </div>
+            <div class="company-info">
+                <h2 class="company-title">{{ company.title }}</h2>
+                <p class="company-description">{{ company.description }}</p>
+            </div>
+            <div class="company-action">
+                <a href="/companies/{{ company.id }}">
+                    <button class="ui primary button">Посмотреть детали</button>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h2 class="no-companies">Компании не найдены</h2>
+    {% endif %}
+</div>
+{% endblock %}

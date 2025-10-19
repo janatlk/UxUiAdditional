@@ -1,0 +1,62 @@
+{% extends 'ru/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'real_estate/css/one_company.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="ui container" style="display: flex; flex-direction: column; gap: 30px; margin-top: 20px;">
+
+    <!-- Баннер компании -->
+    <div class="company-banner ui segment">
+        <div class="company-banner-inner">
+            <div class="company-logo">
+                <img src="{{ company.logo.url }}" alt="{{ company.title }}">
+            </div>
+            <div class="company-info">
+                <h2 class="header">{{ company.title }}</h2>
+                <p class="description">{{ company.description }}</p>
+                <button class="ui primary button" onclick="window.history.back();">Назад</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сетка объектов -->
+    <div class="properties-grid">
+        {% for property in company.property_set.all %}
+        <div class="card">
+            <div class="image">
+                {% with first_image=property.images.first %}
+                    {% if first_image %}
+                        <img src="{{ first_image.image.url }}" alt="Фото">
+                    {% else %}
+                        <img src="/static/no_image.jpg" alt="Нет фото">
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="content">
+                <div class="header">{{ property.title }}</div>
+                <div class="meta">
+                    <span class="date">${{ property.price }}</span>
+                    <br>
+                    <span class="loc2">{{ property.company_linked.title }}</span>
+                    <div class="location">
+                        <span class="loc"><i>{{ property.location }}</i></span>
+                    </div>
+                </div>
+                <div class="description">
+                    <p>{{ property.description }}</p>
+                </div>
+            </div>
+            <div class="dop content">
+                <a href="/property/{{ property.id }}">
+                    <button class="ui primary button">Подробнее</button>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

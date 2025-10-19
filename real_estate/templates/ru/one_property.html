@@ -1,0 +1,108 @@
+{% extends 'ru/navbar.html' %}
+{% load static %}
+
+{% block head %}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+<link rel="stylesheet" href="{% static 'real_estate/css/property_details.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="ui container">
+    <div class="ui card">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                {% for img in property.images.all %}
+                <div class="swiper-slide">
+                    <img src="{{ img.image.url }}" alt="Фото {{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- элементы управления -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+
+        <div class="content">
+            <div class="header">{{ property.title }}</div>
+            <div class="meta"><br>
+                <span class="date">${{ property.price }}</span>
+            </div><br>
+            <div class="location">
+                <span class="loc"><i>{{ property.location }}</i></span>
+            </div><br>
+            <div class="description">
+                <p>{{ property.description }}</p>
+            </div>
+        </div>
+        <div class="extra content">
+            <button class="ui primary button" onclick="window.history.back();">Назад</button>
+            <button class="ui button" id="favorite-btn" onclick="toggleFavorite(
+                '{{ property.id }}',
+                '{{ property.title|escapejs }}',
+                '{{ property.price }}',
+                '{{ property.description|escapejs }}',
+                '{% if property.images.first %}{{ property.images.first.image.url }}{% else %}/static/no_image.jpg{% endif %}'
+            )">
+                Добавить в избранное
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+window.onload = function() {
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const propertyId = '{{ property.id }}';
+    const favoriteBtn = document.getElementById('favorite-btn');
+
+    if (!favoriteBtn) return;
+
+    if (favorites.some(property => property.id == propertyId)) {
+        favoriteBtn.textContent = 'Удалить из избранного';
+    }
+};
+
+function toggleFavorite(propertyId, title, price, description, image) {
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const propertyData = { id: propertyId, title, price, description, image };
+    const favoriteBtn = document.getElementById('favorite-btn');
+
+    if (favorites.some(property => property.id == propertyId)) {
+        favorites = favorites.filter(property => property.id != propertyId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Объект удален из избранного!');
+        if (favoriteBtn) favoriteBtn.textContent = 'Добавить в избранное';
+    } else {
+        favorites.push(propertyData);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Объект добавлен в избранное!');
+        if (favoriteBtn) favoriteBtn.textContent = 'Удалить из избранного';
+    }
+}
+</script>
+
+<script>
+const swiper = new Swiper('.swiper', {
+    loop: true,
+    slidesPerView: 1,
+    spaceBetween: 10,
+    pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+    },
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    speed: 600,
+});
+</script>
+
+{% endblock %}

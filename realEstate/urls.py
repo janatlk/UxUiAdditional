@@ -4,6 +4,7 @@ from django.urls import path
 from real_estate import views
 
 urlpatterns = [
+    path('set-language/<str:lang>/', views.set_language, name='set_language'),
     path('admin/', admin.site.urls, name='admin'),
     path('', views.splash_page, name='splash_page'),
     path('companies/',views.companies_page, name='companies_page'),

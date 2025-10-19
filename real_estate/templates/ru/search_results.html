@@ -1,0 +1,20 @@
+{% extends 'ru/navbar.html' %}
+
+{% block content %}
+    <h2 class="ui header">Search Results for "{{ query }}"</h2>
+
+    {% if results %}
+        <div class="ui divided items">
+            {% for i in results %}
+                <div class="item">
+                    <div class="content">
+                        <a class="header">{{ i.title }}</a>
+                        <div class="description">{{ i.description|truncatewords:25 }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endblock %}
